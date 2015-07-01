@@ -19,3 +19,12 @@ Open project in your IDE and execute `Application.scala` to run spring context.
 * GET /api/users - return a user
 * GET /api/users/{username} - return a user specified by username
 
+* POST /api/contact - send contact message
+```JavaScript
+{
+  "subject": "Contact Modulte Test",
+  "name": "Test User",
+  "email": "test@domian.de",
+  "content": "Hi, how are you?"
+}
+```
