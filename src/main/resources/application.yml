@@ -1,2 +1,13 @@
 server:
   port: 9999
+
+mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    protocol: smtp
+    tls: false
+    auth: false
+    from: myMail@domain.com
+    replyTo: myMail@domain.com

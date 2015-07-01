@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.core.env.Environment
+import org.springframework.core.env.{AbstractEnvironment, Environment}
 
 /**
  * Bootstrap spring - scala application.
@@ -32,5 +32,6 @@ class Application {
 }
 
 object Application extends App {
+  System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "sma-stage")
   SpringApplication.run(classOf[Application])
 }
