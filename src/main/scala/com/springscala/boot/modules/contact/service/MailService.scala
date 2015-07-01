@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
 import org.springframework.core.io.ResourceLoader
 import org.springframework.mail.javamail.{JavaMailSenderImpl, MimeMessageHelper}
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
 /**
@@ -29,13 +30,14 @@ class MailService {
   @Autowired
   var resourceLoader: ResourceLoader = _
 
+  @Async
   def sendEmail(mail: Mail) {
     val mimeMessage = javaMailSender.createMimeMessage()
 
     // move into separate method
     val message = new MimeMessageHelper(mimeMessage, true, "UTF-8")
     message.setFrom(new InternetAddress(env.getProperty("mail.from"), "UTF-8"))
-    //message.setReplyTo(new InternetAddress(env.getProperty("mail.replyTo")))
+    message.setReplyTo(new InternetAddress(env.getProperty("mail.replyTo")))
     message.setSubject(mail.subject)
     message.setTo(mail.to)
     message.setText(mail.content, true)

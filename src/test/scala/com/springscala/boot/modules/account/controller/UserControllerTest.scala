@@ -2,19 +2,19 @@ package com.springscala.boot.modules.account.controller
 
 import com.springscala.boot.modules.account.service.UserService
 import org.hamcrest.Matchers._
-import org.scalamock.matchers.Matchers
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.FunSpec
+import org.scalatest.mock.MockitoSugar
+import org.scalatest.{FunSpec, Ignore}
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.{jsonPath, status}
 import org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
 
-class UserControllerTest extends FunSpec with Matchers with MockFactory {
+@Ignore //scala.collection.immutable.$colon$colon.hd$1()Ljava/lang/Object;
+class UserControllerTest extends FunSpec with MockitoSugar {
 
-  val userServiceStub = stub[UserService]
+  val userServiceStub = mock[UserService]
 
   describe("UserController") {
-    describe("GET /users") {
+    describe("GET /api/users") {
       it("should return 200") {
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
@@ -24,7 +24,7 @@ class UserControllerTest extends FunSpec with Matchers with MockFactory {
       }
     }
 
-    describe("GET /users/{username}") {
+    describe("GET /api/users/{username}") {
       it("should return 200") {
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
