@@ -3,7 +3,7 @@ package com.springscala.boot.modules.contact.config
 import org.slf4j.LoggerFactory
 import org.springframework.boot.bind.RelaxedPropertyResolver
 import org.springframework.context.EnvironmentAware
-import org.springframework.context.annotation.{Bean, Configuration}
+import org.springframework.context.annotation.{Description, Bean, Configuration}
 import org.springframework.core.env.Environment
 import org.springframework.mail.javamail.JavaMailSenderImpl
 
@@ -20,6 +20,7 @@ class MailConfig extends EnvironmentAware {
   }
 
   @Bean(name = Array("JavaMailSender"))
+  @Description("Bean for mail configuration")
   def mailSender() = {
     log.info("Execute Bean for mail configuration")
 

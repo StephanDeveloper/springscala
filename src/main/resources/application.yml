@@ -1,6 +1,10 @@
 server:
   port: 9999
 
+spring:
+    thymeleaf:
+        check-template-location: false
+
 mail:
     host: localhost
     port: 25

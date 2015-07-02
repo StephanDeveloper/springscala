@@ -1,5 +1,6 @@
 package com.springscala.boot.modules.contact.service
 
+import java.util.Locale
 import javax.activation.{DataHandler, DataSource, FileDataSource}
 import javax.mail.internet.{InternetAddress, MimeBodyPart}
 
@@ -11,6 +12,8 @@ import org.springframework.core.io.ResourceLoader
 import org.springframework.mail.javamail.{JavaMailSenderImpl, MimeMessageHelper}
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
+import org.thymeleaf.context.Context
+import org.thymeleaf.spring4.SpringTemplateEngine
 
 /**
  * Service to send mails. Mail attachments must be on the classpath
@@ -30,17 +33,19 @@ class MailService {
   @Autowired
   var resourceLoader: ResourceLoader = _
 
+  @Autowired
+  var templateEngine: SpringTemplateEngine = _
+
   @Async
   def sendEmail(mail: Mail) {
     val mimeMessage = javaMailSender.createMimeMessage()
 
-    // move into separate method
     val message = new MimeMessageHelper(mimeMessage, true, "UTF-8")
     message.setFrom(new InternetAddress(env.getProperty("mail.from"), "UTF-8"))
     message.setReplyTo(new InternetAddress(env.getProperty("mail.replyTo")))
     message.setSubject(mail.subject)
     message.setTo(mail.to)
-    message.setText(mail.content, true)
+    message.setText(getEmailTemplate(mail), true)
 
     if (mail.attachments.isDefined) {
       for (attachment <- mail.attachments.get) {
@@ -59,6 +64,14 @@ class MailService {
     javaMailSender.send(mimeMessage)
     log.info("Sent e-mail to User '{}'", mail.to)
   }
+  
+  private def getEmailTemplate(mail: Mail) = {
+    val context = new Context(Locale.ENGLISH)
+    context.setVariable("mail", mail)
+
+    templateEngine.process("contactMail", context)
+  }
+
 
   private def getInlineAttachment(attachment: Attachment) = {
     val mimeBodyPart = new MimeBodyPart()
