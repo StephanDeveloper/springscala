@@ -6,5 +6,5 @@ mail:
     protocol: smtp
     tls: true
     auth: true
-    from: stephan09.malek@googlemail.com
-    replyTo: stephan09.malek@googlemail.com
+    from: blubb@googlemail.com
+    replyTo: blubb@googlemail.com
