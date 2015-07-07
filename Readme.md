@@ -13,10 +13,11 @@ Open Terminal switch to project and execute `gradle build`. It should resolve
 all dependencies and build a jar file for you.  
 
 Open project in your IDE and execute `Application.scala` to run spring context.
+To use Mail and Couchdb you should create your own `application-my-stage.yml`.
 
 # Api
 
-* GET /api/users - return a user
+* GET /api/users - return list of users
 * GET /api/users/{username} - return a user specified by username
 
 * POST /api/contact - send contact message
