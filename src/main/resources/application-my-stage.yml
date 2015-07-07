@@ -1,0 +1,10 @@
+mail:
+    host: smtp.gmail.com
+    port: 587
+    username: blubb@googlemail.com
+    password: "dummy"
+    protocol: smtp
+    tls: true
+    auth: true
+    from: stephan09.malek@googlemail.com
+    replyTo: stephan09.malek@googlemail.com
