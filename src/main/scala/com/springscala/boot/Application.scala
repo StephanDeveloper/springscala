@@ -2,6 +2,8 @@ package com.springscala.boot
 
 import javax.annotation.PostConstruct
 
+import com.springscala.boot.modules.account.domain.User
+import com.springscala.boot.util.CouchDbImporter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
@@ -32,6 +34,8 @@ class Application {
 }
 
 object Application extends App {
-  System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "sma-stage")
+  System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "my-stage")
   SpringApplication.run(classOf[Application])
+
+  new CouchDbImporter(List(User("Anna", "februar"), new User("stephan", "mobby")))
 }

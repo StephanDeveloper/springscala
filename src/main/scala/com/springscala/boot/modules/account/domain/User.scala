@@ -1,11 +1,7 @@
 package com.springscala.boot.modules.account.domain
 
-import java.util.UUID
+import org.ektorp.support.CouchDbDocument
 
 import scala.beans.BeanProperty
 
-case class User(@BeanProperty username: String, @BeanProperty password: String) {
-
-  @BeanProperty
-  val id = UUID.randomUUID.toString
-}
+case class User(@BeanProperty username: String, @BeanProperty password: String) extends CouchDbDocument

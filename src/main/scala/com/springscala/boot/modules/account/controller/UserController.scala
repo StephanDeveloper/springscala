@@ -14,7 +14,7 @@ class UserController @Autowired()(userService: UserService) {
   @RequestMapping(value = Array("/users"), method = Array(RequestMethod.GET), produces = Array(APPLICATION_JSON_VALUE))
   @ResponseBody
   def getUsers: ResponseEntity[List[User]] = {
-    val userList = List[User](userService.create("stephan", "secret"), userService.create("anna", "secret"))
+    val userList = userService.getAllUser
     new ResponseEntity[List[User]](userList, HttpStatus.OK)
   }
 

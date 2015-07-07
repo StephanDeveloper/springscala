@@ -1,6 +1,11 @@
 server:
   port: 9999
 
+couchdb:
+    bucketname: default
+    password:
+    host: localhost
+
 spring:
     thymeleaf:
         check-template-location: false
