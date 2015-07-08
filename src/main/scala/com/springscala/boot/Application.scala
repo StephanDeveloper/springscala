@@ -37,5 +37,5 @@ object Application extends App {
   System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "my-stage")
   SpringApplication.run(classOf[Application])
 
-  new CouchDbImporter(List(User("Anna", "februar"), new User("stephan", "mobby")))
+  //new CouchDbImporter(List(User("Anna", "februar"), new User("stephan", "mobby")))
 }
