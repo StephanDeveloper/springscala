@@ -20,7 +20,7 @@ class UserController @Autowired()(userService: UserService) {
 
   @RequestMapping(value = Array("/users/{username}"), method = Array(RequestMethod.GET), produces = Array(APPLICATION_JSON_VALUE))
   def getUser(@PathVariable username: String): ResponseEntity[User] = {
-    val userList = List(User("egon", "secret"), User("bert", "secret"), User("hans", "secret"))
+    val userList = userService.getAllUser
 
     def response(xs: List[User]): ResponseEntity[User] =
       xs match {
