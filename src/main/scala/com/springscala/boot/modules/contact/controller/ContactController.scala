@@ -6,6 +6,7 @@ import com.typesafe.scalalogging.slf4j.LazyLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType._
 import org.springframework.http.{HttpStatus, ResponseEntity}
+import org.springframework.mail.MailException
 import org.springframework.web.bind.annotation.{RequestBody, RequestMapping, RequestMethod, RestController}
 
 
@@ -30,7 +31,7 @@ class ContactController @Autowired()(mailService: MailService) extends LazyLoggi
         new ResponseEntity[Void](HttpStatus.OK)
       }
       catch {
-        case e: Exception =>
+        case e: MailException =>
           logger.error(e.getMessage)
           new ResponseEntity[Void](HttpStatus.INTERNAL_SERVER_ERROR)
       }
