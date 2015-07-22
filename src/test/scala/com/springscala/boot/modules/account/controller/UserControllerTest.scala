@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetu
 class UserControllerTest extends FunSpec with MockitoSugar {
 
   val userServiceStub = mock[UserService]
-  val user = User("egon", "ral", "secret", "a@b.de", List.empty)
+  val user = User("tian09", "egon", "weider", "secret", "a@b.de", "EN", List.empty)
 
   describe("UserController") {
     describe("GET /api/users") {
@@ -32,7 +32,7 @@ class UserControllerTest extends FunSpec with MockitoSugar {
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
 
-        mvc.perform(get("/api/users/egon")).
+        mvc.perform(get("/api/users/tian09")).
           andExpect(status().isOk())
       }
 
@@ -41,12 +41,14 @@ class UserControllerTest extends FunSpec with MockitoSugar {
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
 
-        mvc.perform(get("/api/users/egon")).
+        mvc.perform(get("/api/users/tian09")).
           andExpect(status().isOk()).
-          andExpect(jsonPath("$.username", is("egon"))).
-          andExpect(jsonPath("$.lastname", is("ral"))).
+          andExpect(jsonPath("$.username", is("tian09"))).
+          andExpect(jsonPath("$.firstname", is("egon"))).
+          andExpect(jsonPath("$.lastname", is("weider"))).
           andExpect(jsonPath("$.password", is("secret"))).
-          andExpect(jsonPath("$.email", is("a@b.de")))
+          andExpect(jsonPath("$.email", is("a@b.de"))).
+          andExpect(jsonPath("$.languageKey", is("EN")))
       }
 
       it("should return 404") {

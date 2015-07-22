@@ -4,8 +4,7 @@ package com.springscala.boot.modules.account.repository
 import com.springscala.boot.modules.account.domain.{Authority, User}
 import org.ektorp.CouchDbConnector
 import org.ektorp.support.{CouchDbRepositorySupport, View}
-import org.json4s.{ShortTypeHints, DefaultFormats}
-import org.json4s.JsonAST.{JString, JField, JObject}
+import org.json4s.ShortTypeHints
 import org.json4s.jackson.JsonMethods._
 import org.json4s.jackson.Serialization
 
@@ -23,12 +22,23 @@ class UserRepository(db: CouchDbConnector) extends CouchDbRepositorySupport[User
       val json = parse(userJson)
 
       val username = (json \ "username").extract[String]
+      val firstname = (json \ "firstname").extract[String]
       val lastname = (json \ "lastname").extract[String]
       val password = (json \ "password").extract[String]
       val email = (json \ "email").extract[String]
+      val languageKey = (json \ "languageKey").extract[String]
       val authorities = (json \ "authorities").extract[List[Authority]]
 
-      User(username, lastname, password, email, authorities)
+      User(username, firstname, lastname, password, email, languageKey, authorities)
     }).toList
+  }
+
+  def findByUsername(username: String): Option[User] = {
+    val users = this.findAll()
+
+    users.find {
+      case User(`username`, _, _, _, _,_,_) if username == username => true
+      case _ => false
+    }
   }
 }

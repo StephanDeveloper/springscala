@@ -1,7 +1,7 @@
 package com.springscala.boot
 
 import javax.annotation.PostConstruct
-import javax.validation.Valid
+import javax.validation.{Validation, ValidatorFactory, Valid}
 
 import com.springscala.boot.modules.account.domain.{Authority, AuthorityRole, User}
 import org.slf4j.LoggerFactory
@@ -37,7 +37,9 @@ object Application extends App {
   System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "my-stage")
   SpringApplication.run(classOf[Application])
 
-  //println(x)
+  val x = User("tian09", "Hans", "Dampf", "secret", "a@b.de", "EN", List(Authority(AuthorityRole.ROLE_USER)))
+
+
   //  new CouchDbImporter(List(
   //    User("Anna", "februar", "test", "a@b.de", List(Authority(AuthorityRole.ROLE_USER))),
   //    User("Stephan", "februar", "test", "a@b.de", List(Authority(AuthorityRole.ROLE_USER)))
