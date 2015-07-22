@@ -17,7 +17,7 @@ class UserDetailsServiceAuth extends UserDetailsService with LazyLogging {
   override def loadUserByUsername(username: String) = {
     logger.info(s"Authentication $username")
 
-    //val user = userService.findByUsername(username.toLowerCase)
+    val user = userService.getByUsername(username.toLowerCase)
     //println(user)
     //    userRepository.findByUsername(username.toLowerCase) match {
     //      case Some(user) => new User("a", "b", List("User"))

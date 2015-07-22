@@ -29,4 +29,6 @@ class UserController @Autowired()(userService: UserService) extends Serializable
 
     response
   }
+
+
 }
