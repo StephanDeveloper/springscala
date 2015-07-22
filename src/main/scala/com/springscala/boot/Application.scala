@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct
 import javax.validation.{Validation, ValidatorFactory, Valid}
 
 import com.springscala.boot.modules.account.domain.{Authority, AuthorityRole, User}
+import com.springscala.boot.util.CouchDbImporter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
@@ -38,7 +39,7 @@ object Application extends App {
   SpringApplication.run(classOf[Application])
 
   val x = User("tian09", "Hans", "Dampf", "secret", "a@b.de", "EN", List(Authority(AuthorityRole.ROLE_USER)))
-
+  new CouchDbImporter(List(x))
 
   //  new CouchDbImporter(List(
   //    User("Anna", "februar", "test", "a@b.de", List(Authority(AuthorityRole.ROLE_USER))),

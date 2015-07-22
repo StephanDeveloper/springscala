@@ -22,27 +22,27 @@ class UserControllerTest extends FunSpec with MockitoSugar {
         val mvc = standaloneSetup(userController).build()
 
         mvc.perform(get("/api/users")).
-          andExpect(status().isOk())
+          andExpect(status().isOk)
       }
     }
 
     describe("GET /api/users/{username}") {
       it("should return 200") {
-        when(userServiceStub.getAllUser).thenReturn(List(user))
+        when(userServiceStub.getByUsername("tian09")).thenReturn(Some(user))
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
 
         mvc.perform(get("/api/users/tian09")).
-          andExpect(status().isOk())
+          andExpect(status().isOk)
       }
 
       it("should return user") {
-        when(userServiceStub.getAllUser).thenReturn(List(user))
+        when(userServiceStub.getByUsername("tian09")).thenReturn(Some(user))
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
 
         mvc.perform(get("/api/users/tian09")).
-          andExpect(status().isOk()).
+          andExpect(status().isOk).
           andExpect(jsonPath("$.username", is("tian09"))).
           andExpect(jsonPath("$.firstname", is("egon"))).
           andExpect(jsonPath("$.lastname", is("weider"))).
@@ -52,7 +52,7 @@ class UserControllerTest extends FunSpec with MockitoSugar {
       }
 
       it("should return 404") {
-        when(userServiceStub.getAllUser).thenReturn(List(user))
+        when(userServiceStub.getByUsername("tian09")).thenReturn(None)
         val userController = new UserController(userService = userServiceStub)
         val mvc = standaloneSetup(userController).build()
 

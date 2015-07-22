@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation._
 
 @RequestMapping(Array("/api"))
 @RestController
-class UserController @Autowired()(userService: UserService) {
+class UserController @Autowired()(userService: UserService) extends Serializable {
 
   @RequestMapping(value = Array("/users"), method = Array(RequestMethod.GET), produces = Array(APPLICATION_JSON_VALUE))
   @ResponseBody
@@ -20,15 +20,13 @@ class UserController @Autowired()(userService: UserService) {
 
   @RequestMapping(value = Array("/users/{username}"), method = Array(RequestMethod.GET), produces = Array(APPLICATION_JSON_VALUE))
   def getUser(@PathVariable username: String): ResponseEntity[User] = {
-    val userList = userService.getAllUser
+    val userOption = userService.getByUsername(username)
 
-    def response(xs: List[User]): ResponseEntity[User] =
-      xs match {
-        case Nil => new ResponseEntity[User](HttpStatus.NOT_FOUND)
-        case head :: _ if head.username.equals(username) => new ResponseEntity[User](head, HttpStatus.OK)
-        case _ :: tail => response(tail)
-      }
+    val response = userOption match {
+      case Some(user) => new ResponseEntity[User](user, HttpStatus.OK)
+      case _ => new ResponseEntity[User](HttpStatus.NOT_FOUND)
+    }
 
-    response(userList)
+    response
   }
 }
