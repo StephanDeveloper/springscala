@@ -13,20 +13,7 @@ class UserRepository(db: CouchDbConnector) extends CouchDbRepositorySupport[User
 
   initStandardDesignDocument()
 
-  @View(name = "findAllUser", map =
-    """
-      function (doc) {
-         emit(null, {
-             'username': doc.username,
-             'firstname': doc.firstname,
-             'lastname': doc.lastname,
-             'password': doc.password,
-             'email': doc.email,
-             'languageKey': doc.languageKey,
-             'authorities': doc.authorities
-         })
-      }
-    """)
+  @View(name = "findAllUser", map = "classpath:/designdocuments/findAllUser.js")
   def findAll(): List[User] = {
     val rows = db.queryView(createQuery("findAllUser")).getRows
     val usersJson = for (i <- 0 to rows.size() - 1) yield rows.get(i).getValue

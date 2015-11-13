@@ -1,56 +1,70 @@
 package com.springscala.boot.modules.account.repository
 
-import com.springscala.boot.modules.account.domain.{Authority, AuthorityRole, User}
-import org.ektorp.CouchDbConnector
-import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
-import org.scalatest.{FunSpec, Ignore, Inside, Matchers}
+import com.springscala.boot.ApplicationConfig
+import com.springscala.boot.modules.account.domain.{AuthorityRole, Authority, User}
+import org.ektorp.{CouchDbConnector, CouchDbInstance}
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.context.annotation.{Bean, Primary}
+import org.springframework.core.env.Environment
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
+import org.testng.annotations.{AfterMethod, BeforeMethod, Test}
 
-@Ignore // uncommented , ViewResult has to be mocked
-class UserRepositoryTest extends FunSpec with Inside with Matchers with MockitoSugar {
+class TestConfig {
 
-  val couchdbConnector = mock[CouchDbConnector]
+  @Autowired
+  var env: Environment = _
 
-  describe("UserRepository") {
-    val userRepository = new UserRepository(couchdbConnector)
-    // when(couchdbConnector.queryView(_)).thenReturn(List.empty[ViewResult])
+  @Primary
+  @Bean
+  def springscalaDbName() =
+    "test_" + env.getProperty("springscalaDbName.dbName", classOf[String], "springscala")
 
+}
 
-    describe("function findByUsername") {
-      it("should return user") {
-        when(userRepository.findAll()).thenReturn(List(
-          User("Anna", "tina", "lei", "test", "a@b.de", "EN", List(Authority(AuthorityRole.ROLE_USER))),
-          User("Stephan", "hans", "dampf", "test", "a@b.de", "EN", List(Authority(AuthorityRole.ROLE_USER)))
-        ))
+@ContextConfiguration(classes = Array(classOf[ApplicationConfig], classOf[TestConfig]), loader = classOf[SpringApplicationContextLoader])
+class UserRepositoryTest extends AbstractTestNGSpringContextTests {
 
-        val userOption = userRepository.findByUsername("Anna")
-        userOption match {
-          case Some(user) =>
-            inside(user) {
-              case User(username: String, _, _, _, _, _, _) =>
-                username should be("Anna")
-            }
-          case None =>
-        }
-      }
-    }
+  @Autowired
+  var db: CouchDbConnector = _
+
+  @Autowired
+  var dbInstance: CouchDbInstance = _
+
+  var userRepository: UserRepository = _
+
+  @BeforeMethod
+  def setUp() {
+    db.createDatabaseIfNotExists()
+    userRepository = new UserRepository(db)
   }
 
+  @AfterMethod
+  def tearDown() {
+    dbInstance.deleteDatabase(db.getDatabaseName)
+  }
 
+  private def users = {
+    List(
+      User("Anna", "tina", "lei", "test", "a@b.de", "EN", List(Authority(AuthorityRole.ROLE_USER))),
+      User("Stephan", "hans", "dampf", "test", "a@b.de", "EN", List(Authority(AuthorityRole.ROLE_USER)))
+    )
+  }
 
-  //  val couchdbConnector = mock[CouchDbConnector]
-  //
-  //  describe("UserRepository function create") {
-  //    it("should return user") {
-  //      val userService = new UserRepository(couchdbConnector)
-  ////      val expectedUser = userService.create("username", "password")
-  //      //
-  //      //      inside(expectedUser) {
-  //      //        case User(username: String, password: String) =>
-  //      //          username should be("username")
-  //      //          password should be("password")
-  //      //      }
-  //    }
-  //  }
+  @Test
+  def testFindByUsername() {
+    users.foreach(userRepository.add)
+    val expectedUser = userRepository.findByUsername("Anna")
+    assert(expectedUser.get.firstname == "tina")
+  }
+
+  @Test
+  def testFindAllUsers() {
+    users.foreach(userRepository.add)
+    val expectedUser = userRepository.findAll()
+    assert(expectedUser.size == 2)
+    assert(expectedUser.equals(users))
+  }
 }
 

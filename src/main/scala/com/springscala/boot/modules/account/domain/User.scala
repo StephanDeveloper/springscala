@@ -26,7 +26,7 @@ case class User
 (
   @BeanProperty
   @(Size@beanGetter)(min = 1, max = 50)
-  @(Pattern@beanGetter)(regexp = "^[a-z0-9]*$")
+  @(Pattern@beanGetter)(regexp = "^[a-zA-Z0-9]*$")
   username: String,
 
   @BeanProperty
